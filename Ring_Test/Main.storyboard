@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="5m2-dA-5xX">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="mcB-ZU-OUj">
+            <objects>
+                <navigationController id="5m2-dA-5xX" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="xUD-ac-EK4">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="GoH-td-Z4J" kind="relationship" relationship="rootViewController" id="b13-gB-jvt"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5fw-zZ-ub0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-994" y="159"/>
+        </scene>
+        <!--Reddit Table View Controller-->
+        <scene sceneID="nHt-ac-8rI">
+            <objects>
+                <tableViewController storyboardIdentifier="RedditTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="GoH-td-Z4J" customClass="RedditTableViewController" customModule="Ring_Test" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="oBS-2U-NNF">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="GoH-td-Z4J" id="sy8-4w-e9k"/>
+                            <outlet property="delegate" destination="GoH-td-Z4J" id="JuR-1Z-f3o"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="7AK-pq-Cwh"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="F3p-oS-ucI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-92" y="159"/>
+        </scene>
+    </scenes>
+</document>

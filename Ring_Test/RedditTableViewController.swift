@@ -79,10 +79,29 @@ class RedditTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier) as! PostTableViewCell
         let post = posts[indexPath.row]
         cell.configure(post: post)
+        cell.saveCallback = {
+            self.presentSaveOptions(post: post)
+        }
+        
         if indexPath.row >= posts.count - 1 {
             fetchNextPage()
         }
         return cell
+    }
+    
+    func presentSaveOptions(post: Post) {
+        guard let imageURL = post.imageURL else { return }
+        let task = URLSession.shared.downloadTask(with: URL(string: imageURL)!) {
+            url, response, error in
+            guard let url = url else { return }
+            if let image = UIImage(data: try! Data(contentsOf: url)) {
+                DispatchQueue.main.async {
+                    let share = UIActivityViewController(activityItems: [image], applicationActivities: [])
+                    self.present(share, animated: true)
+                }
+            }
+        }
+        task.resume()
     }
     
     func fetchNextPage() {

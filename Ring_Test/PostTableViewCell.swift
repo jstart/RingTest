@@ -13,24 +13,35 @@ class PostTableViewCell: UITableViewCell {
 
     let titleLabel = UILabel(translates: false)
     let mediaView = UIImageView(translates: false)
+    let saveButton = UIButton(translates: false)
     var post : Post?
     var const : NSLayoutConstraint?
+    var saveCallback : (() -> Void)?
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        addSubview(titleLabel); addSubview(mediaView)
+        addSubview(titleLabel); addSubview(mediaView); addSubview(saveButton)
+        
+        saveButton.setTitle("Save Image", for: .normal)
+        saveButton.setTitleColor(.blue, for: .normal)
+        saveButton.addTarget(self, action: #selector(saveImage), for: .touchUpInside)
         
         titleLabel.numberOfLines = 0
         const = mediaView.constraint(.height, toItem: self, toAttribute: .width, multiplier: 0.5)
         const?.isActive = true
         mediaView.constrain(.width, toItem: self, multiplier: 0.5)
 
-        mediaView.constrain((.top, 10), (.centerX, 0), toItem: self)
+        mediaView.constrain((.top, 10), (.centerX, -40), toItem: self)
         let topConstraint = titleLabel.constraint(.top, constant: 10, toItem: mediaView, toAttribute: .bottom)
         topConstraint.priority = 999
         topConstraint.isActive = true
         titleLabel.constrain((.left, 10), (.right, -10), toItem: self)
         titleLabel.constrain((.bottom, -10), toItem: self)
+        
+        saveButton.constrain(.left, constant: 10, toItem: mediaView, toAttribute: .right)
+        saveButton.constrain(.right, relatedBy: .lessThanOrEqual, constant: -10, toItem: self)
+        saveButton.constrain(.width, relatedBy: .lessThanOrEqual, constant: 100)
+        saveButton.constrain(.centerY, toItem: mediaView)
         
         mediaView.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(openImage))
@@ -42,6 +53,7 @@ class PostTableViewCell: UITableViewCell {
         titleLabel.text = ""
         mediaView.image = nil
         mediaView.backgroundColor = .white
+        saveButton.isHidden = false
     }
     
     func openImage() {
@@ -51,6 +63,10 @@ class PostTableViewCell: UITableViewCell {
         UIApplication.shared.open(imageURL, options: [:])
     }
     
+    func saveImage() {
+        saveCallback?()
+    }
+    
     func configure(post: Post) {
         self.post = post
         if post.commentCount == 1 {
@@ -58,7 +74,7 @@ class PostTableViewCell: UITableViewCell {
         } else {
             titleLabel.text = "\(post.caption)\nAuthor: \(post.author)\nPosted Date: \(post.createdAt.timeAgoSinceNow(useNumericDates: false)) \n\(post.commentCount) comments"
         }
-        guard let imageURL = post.imageURL else { return }
+        guard let imageURL = post.imageURL else { saveButton.isHidden = true; return }
 
         let task = URLSession.shared.downloadTask(with: URL(string: imageURL)!) {
             url, response, error in
